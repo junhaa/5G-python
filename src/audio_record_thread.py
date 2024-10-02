@@ -16,7 +16,7 @@ PORT = 12345      # 포트 번호
 # 큐 생성
 audio_queue = queue.Queue(maxsize=BUFFER_SIZE)
 
-mqtt_ip = 'hivemq.com'
+mqtt_ip = 'broker.hivemq.com'
 # 녹음 스레드 함수
 def record_audio():
     audio = pyaudio.PyAudio()
