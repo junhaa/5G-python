@@ -36,7 +36,7 @@ def record_audio():
 
 #mqtt 전송 스레드 함수
 def send_audio_mqtt():
-    client = mqtt.client(mqtt.CallbackAPIVersion.VERSION2)
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     client.connect(mqtt_ip, 1883)
     client.loop_start()
 
