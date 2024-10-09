@@ -45,7 +45,6 @@ def send_audio_mqtt():
             if not audio_queue.empty():
                 audio_data = audio_queue.get()
                 client.publish("audio", audio_data)
-                print("전송된 데이터:%d" % len(audio_data))
     except KeyboardInterrupt:
         print('mqtt 전송 종료.')
 
