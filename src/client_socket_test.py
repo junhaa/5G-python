@@ -3,7 +3,7 @@ import pyaudio
 import wave
 
 # 서버의 IP 주소와 포트 번호
-SERVER_IP = '192.168.1.194'
+SERVER_IP = '192.168.0.5'
 PORT = 12345
 
 # 오디오 설정
