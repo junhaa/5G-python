@@ -2,6 +2,7 @@ import socket
 import pyaudio
 import threading
 import queue
+import paho.mqtt.client as mqtt
 
 # 녹음 및 소켓 설정
 CHUNK = 1024
@@ -15,6 +16,7 @@ PORT = 12345      # 포트 번호
 # 큐 생성
 audio_queue = queue.Queue(maxsize=BUFFER_SIZE)
 
+mqtt_ip = 'broker.hivemq.com'
 # 녹음 스레드 함수
 def record_audio():
     audio = pyaudio.PyAudio()
@@ -31,6 +33,20 @@ def record_audio():
         stream.stop_stream()
         stream.close()
         audio.terminate()
+
+#mqtt 전송 스레드 함수
+def send_audio_mqtt():
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    client.connect(mqtt_ip, 1883)
+    client.loop_start()
+
+    try:
+        while True:
+            if not audio_queue.empty():
+                audio_data = audio_queue.get()
+                client.publish("audio", audio_data)
+    except KeyboardInterrupt:
+        print('mqtt 전송 종료.')
 
 # 소켓 전송 스레드 함수
 def send_audio():
@@ -55,7 +71,7 @@ def send_audio():
 
 # 녹음 및 소켓 스레드 생성
 record_thread = threading.Thread(target=record_audio)
-send_thread = threading.Thread(target=send_audio)
+send_thread = threading.Thread(target=send_audio_mqtt)
 
 # 스레드 시작
 record_thread.start()
